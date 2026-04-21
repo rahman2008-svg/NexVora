@@ -1,0 +1,2315 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NexVora — ProtoFolio Builder</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:wght@300;400;500&family=Cabinet+Grotesk:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #07070a;
+    --surface: #0f0f14;
+    --surface2: #16161e;
+    --border: #1e1e2a;
+    --accent: #6c63ff;
+    --accent2: #ff6584;
+    --accent3: #43e97b;
+    --text: #e8e8f0;
+    --text-muted: #6b6b80;
+    --text-dim: #3a3a4a;
+    --neon: #6c63ff;
+    --radius: 12px;
+    --radius-lg: 20px;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'DM Mono', monospace;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* BACKGROUND GRID */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(108,99,255,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(108,99,255,0.03) 1px, transparent 1px);
+    background-size: 40px 40px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* ═══════════ HEADER ═══════════ */
+  header {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 32px;
+    background: rgba(7,7,10,0.85);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .logo {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: 22px;
+    letter-spacing: -0.5px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .logo-icon {
+    width: 32px; height: 32px;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+  }
+
+  .logo span { color: var(--accent); }
+
+  .header-badge {
+    font-size: 10px;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    color: white;
+    padding: 3px 8px;
+    border-radius: 20px;
+    font-weight: 500;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    animation: pulse-badge 2s ease-in-out infinite;
+  }
+
+  @keyframes pulse-badge {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.7; }
+  }
+
+  nav {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .nav-btn {
+    padding: 8px 16px;
+    border-radius: 8px;
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    cursor: pointer;
+    border: none;
+    transition: all 0.2s;
+  }
+
+  .nav-btn-ghost {
+    background: transparent;
+    color: var(--text-muted);
+    border: 1px solid var(--border);
+  }
+
+  .nav-btn-ghost:hover { color: var(--text); border-color: var(--accent); }
+
+  .nav-btn-primary {
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    color: white;
+    font-weight: 500;
+  }
+
+  .nav-btn-primary:hover { transform: translateY(-1px); box-shadow: 0 8px 25px rgba(108,99,255,0.4); }
+
+  /* ═══════════ HERO ═══════════ */
+  #landing {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 100px 32px 60px;
+    position: relative;
+    z-index: 1;
+    text-align: center;
+  }
+
+  .hero-glow {
+    position: absolute;
+    width: 600px; height: 600px;
+    background: radial-gradient(circle, rgba(108,99,255,0.15) 0%, transparent 70%);
+    border-radius: 50%;
+    pointer-events: none;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+  }
+
+  .hero-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 11px;
+    color: var(--accent);
+    border: 1px solid rgba(108,99,255,0.3);
+    padding: 6px 14px;
+    border-radius: 20px;
+    margin-bottom: 28px;
+    background: rgba(108,99,255,0.08);
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    animation: fade-in 0.8s ease both;
+  }
+
+  .hero-title {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: clamp(48px, 8vw, 88px);
+    line-height: 1.0;
+    letter-spacing: -3px;
+    margin-bottom: 24px;
+    animation: fade-up 0.8s 0.1s ease both;
+  }
+
+  .hero-title .gradient-text {
+    background: linear-gradient(135deg, var(--accent) 0%, var(--accent2) 50%, #ffd93d 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .hero-sub {
+    font-family: 'Cabinet Grotesk', sans-serif;
+    font-size: 18px;
+    color: var(--text-muted);
+    max-width: 540px;
+    line-height: 1.7;
+    margin-bottom: 48px;
+    animation: fade-up 0.8s 0.2s ease both;
+  }
+
+  .hero-cta {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    justify-content: center;
+    animation: fade-up 0.8s 0.3s ease both;
+  }
+
+  .btn-lg {
+    padding: 14px 32px;
+    border-radius: 12px;
+    font-family: 'Syne', sans-serif;
+    font-size: 15px;
+    font-weight: 700;
+    cursor: pointer;
+    border: none;
+    transition: all 0.25s;
+    letter-spacing: -0.3px;
+  }
+
+  .btn-lg-primary {
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    color: white;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .btn-lg-primary::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, #8b85ff, #ff85a0);
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+
+  .btn-lg-primary:hover::before { opacity: 1; }
+  .btn-lg-primary:hover { transform: translateY(-2px); box-shadow: 0 16px 40px rgba(108,99,255,0.5); }
+
+  .btn-lg-outline {
+    background: transparent;
+    color: var(--text);
+    border: 1px solid var(--border);
+  }
+
+  .btn-lg-outline:hover { border-color: var(--accent); color: var(--accent); }
+
+  .hero-stats {
+    display: flex;
+    gap: 48px;
+    margin-top: 80px;
+    animation: fade-up 0.8s 0.4s ease both;
+  }
+
+  .stat-item { text-align: center; }
+
+  .stat-num {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: 32px;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .stat-label {
+    font-size: 11px;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-top: 4px;
+  }
+
+  /* ═══════════ TEMPLATES SECTION ═══════════ */
+  #builder {
+    position: relative;
+    z-index: 1;
+    padding: 80px 32px;
+    max-width: 1400px;
+    margin: 0 auto;
+  }
+
+  .section-header {
+    text-align: center;
+    margin-bottom: 56px;
+  }
+
+  .section-eyebrow {
+    font-size: 11px;
+    color: var(--accent);
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    margin-bottom: 16px;
+    display: block;
+  }
+
+  .section-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 42px;
+    font-weight: 800;
+    letter-spacing: -2px;
+    line-height: 1.1;
+  }
+
+  /* MAIN BUILDER LAYOUT */
+  .builder-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+    align-items: start;
+  }
+
+  /* LEFT PANEL */
+  .form-panel {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+  }
+
+  .panel-header {
+    padding: 20px 24px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: var(--surface2);
+  }
+
+  .panel-title {
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 15px;
+    letter-spacing: -0.3px;
+  }
+
+  .panel-tag {
+    font-size: 10px;
+    padding: 3px 8px;
+    border-radius: 6px;
+    font-weight: 500;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+  }
+
+  .tag-green { background: rgba(67,233,123,0.15); color: var(--accent3); }
+  .tag-blue { background: rgba(108,99,255,0.15); color: var(--accent); }
+
+  /* STEP TABS */
+  .step-tabs {
+    display: flex;
+    gap: 4px;
+    padding: 16px 24px;
+    border-bottom: 1px solid var(--border);
+    background: var(--surface2);
+  }
+
+  .step-tab {
+    flex: 1;
+    padding: 8px;
+    border-radius: 8px;
+    text-align: center;
+    font-size: 10px;
+    cursor: pointer;
+    transition: all 0.2s;
+    border: 1px solid transparent;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    font-weight: 500;
+  }
+
+  .step-tab.active {
+    background: rgba(108,99,255,0.15);
+    border-color: rgba(108,99,255,0.3);
+    color: var(--accent);
+  }
+
+  .step-tab.done {
+    background: rgba(67,233,123,0.08);
+    border-color: rgba(67,233,123,0.2);
+    color: var(--accent3);
+  }
+
+  .step-tab:hover:not(.active) { background: var(--border); color: var(--text); }
+
+  /* TEMPLATE SELECTOR */
+  .template-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    padding: 20px 24px;
+  }
+
+  .template-card {
+    border: 2px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+    cursor: pointer;
+    transition: all 0.25s;
+    position: relative;
+  }
+
+  .template-card:hover { border-color: var(--accent); transform: translateY(-2px); }
+  .template-card.selected { border-color: var(--accent); box-shadow: 0 0 0 4px rgba(108,99,255,0.15); }
+
+  .template-card.selected::after {
+    content: '✓';
+    position: absolute;
+    top: 8px; right: 8px;
+    width: 22px; height: 22px;
+    background: var(--accent);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    color: white;
+    line-height: 22px;
+    text-align: center;
+  }
+
+  .template-preview {
+    height: 80px;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .tp-dark { background: linear-gradient(135deg, #0d0d1a 0%, #1a0d2e 100%); }
+  .tp-clean { background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%); }
+  .tp-bold { background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 100%); border-left: 4px solid #ff6b6b; }
+  .tp-glass { background: linear-gradient(135deg, #1a2a4a 0%, #2a1a4a 100%); }
+  .tp-neon { background: linear-gradient(135deg, #001a00 0%, #001a1a 100%); }
+  .tp-minimal { background: linear-gradient(135deg, #fafafa 0%, #f0f0f0 100%); }
+
+  .tp-icon {
+    font-size: 28px;
+    filter: drop-shadow(0 0 8px rgba(255,255,255,0.3));
+  }
+
+  .template-info { padding: 10px 12px; background: var(--surface2); }
+
+  .template-name {
+    font-family: 'Syne', sans-serif;
+    font-size: 12px;
+    font-weight: 700;
+    margin-bottom: 2px;
+  }
+
+  .template-desc {
+    font-size: 10px;
+    color: var(--text-muted);
+  }
+
+  /* FORM FIELDS */
+  .form-body {
+    padding: 20px 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .form-section {
+    display: none;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .form-section.active { display: flex; }
+
+  .field-group { display: flex; flex-direction: column; gap: 6px; }
+
+  .field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+
+  label {
+    font-size: 10px;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-weight: 500;
+  }
+
+  .field-input {
+    padding: 10px 14px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    color: var(--text);
+    font-family: 'DM Mono', monospace;
+    font-size: 13px;
+    outline: none;
+    transition: all 0.2s;
+    width: 100%;
+  }
+
+  .field-input:focus {
+    border-color: var(--accent);
+    background: rgba(108,99,255,0.06);
+    box-shadow: 0 0 0 3px rgba(108,99,255,0.1);
+  }
+
+  .field-input::placeholder { color: var(--text-dim); }
+
+  textarea.field-input {
+    resize: vertical;
+    min-height: 80px;
+    line-height: 1.6;
+  }
+
+  /* SKILLS INPUT */
+  .skills-input-wrap {
+    position: relative;
+  }
+
+  .skills-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    padding: 8px 12px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    min-height: 42px;
+    cursor: text;
+    transition: border-color 0.2s;
+  }
+
+  .skills-tags:focus-within { border-color: var(--accent); }
+
+  .skill-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 3px 8px;
+    background: rgba(108,99,255,0.15);
+    border: 1px solid rgba(108,99,255,0.3);
+    border-radius: 6px;
+    font-size: 11px;
+    color: var(--accent);
+    cursor: default;
+    animation: tag-pop 0.15s ease both;
+  }
+
+  @keyframes tag-pop {
+    from { transform: scale(0.8); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
+  }
+
+  .skill-tag-remove {
+    cursor: pointer;
+    opacity: 0.5;
+    font-size: 10px;
+    line-height: 1;
+    padding: 1px;
+  }
+
+  .skill-tag-remove:hover { opacity: 1; }
+
+  .skill-input {
+    background: none;
+    border: none;
+    outline: none;
+    color: var(--text);
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    min-width: 80px;
+    flex: 1;
+  }
+
+  .skill-hint { font-size: 10px; color: var(--text-dim); margin-top: 4px; }
+
+  /* COLOR PICKER ROW */
+  .color-row {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+  }
+
+  .color-swatch {
+    width: 30px; height: 30px;
+    border-radius: 8px;
+    cursor: pointer;
+    border: 2px solid transparent;
+    transition: all 0.2s;
+    position: relative;
+  }
+
+  .color-swatch.selected { border-color: white; transform: scale(1.15); }
+
+  .color-swatch:hover { transform: scale(1.1); }
+
+  /* PROJECTS */
+  .projects-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .project-item {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    animation: fade-in 0.3s ease both;
+    position: relative;
+  }
+
+  .project-remove {
+    position: absolute;
+    top: 10px; right: 10px;
+    width: 22px; height: 22px;
+    background: rgba(255,101,132,0.15);
+    border: none;
+    border-radius: 6px;
+    color: var(--accent2);
+    cursor: pointer;
+    font-size: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+  }
+
+  .project-remove:hover { background: rgba(255,101,132,0.3); }
+
+  .add-project-btn {
+    padding: 10px;
+    background: transparent;
+    border: 1px dashed var(--border);
+    border-radius: 10px;
+    color: var(--text-muted);
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    cursor: pointer;
+    transition: all 0.2s;
+    width: 100%;
+    text-align: center;
+  }
+
+  .add-project-btn:hover { border-color: var(--accent); color: var(--accent); background: rgba(108,99,255,0.05); }
+
+  /* PANEL FOOTER */
+  .panel-footer {
+    padding: 16px 24px;
+    border-top: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: var(--surface2);
+  }
+
+  .btn-prev, .btn-next {
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-family: 'Syne', sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+    border: none;
+    transition: all 0.2s;
+    letter-spacing: -0.2px;
+  }
+
+  .btn-prev {
+    background: transparent;
+    color: var(--text-muted);
+    border: 1px solid var(--border);
+  }
+
+  .btn-prev:hover:not(:disabled) { border-color: var(--text-muted); color: var(--text); }
+  .btn-prev:disabled { opacity: 0.3; cursor: not-allowed; }
+
+  .btn-next {
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    color: white;
+    min-width: 120px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .btn-next:hover { transform: translateY(-1px); box-shadow: 0 8px 25px rgba(108,99,255,0.4); }
+
+  .btn-generate {
+    background: linear-gradient(135deg, var(--accent3), #00c9ff);
+    animation: glow-pulse 2s ease-in-out infinite;
+  }
+
+  @keyframes glow-pulse {
+    0%, 100% { box-shadow: 0 0 20px rgba(67,233,123,0.3); }
+    50% { box-shadow: 0 0 40px rgba(67,233,123,0.6); }
+  }
+
+  /* PROGRESS BAR */
+  .progress-bar {
+    height: 3px;
+    background: var(--border);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--accent), var(--accent2));
+    transition: width 0.4s ease;
+    border-radius: 3px;
+  }
+
+  /* RIGHT PANEL - PREVIEW */
+  .preview-panel {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    position: sticky;
+    top: 80px;
+  }
+
+  .preview-toolbar {
+    padding: 14px 20px;
+    border-bottom: 1px solid var(--border);
+    background: var(--surface2);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+  }
+
+  .browser-dots {
+    display: flex;
+    gap: 6px;
+  }
+
+  .dot {
+    width: 10px; height: 10px;
+    border-radius: 50%;
+  }
+
+  .dot-red { background: #ff5f57; }
+  .dot-yellow { background: #ffbd2e; }
+  .dot-green { background: #28c840; }
+
+  .url-bar {
+    flex: 1;
+    padding: 6px 12px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    font-size: 11px;
+    color: var(--text-muted);
+    font-family: 'DM Mono', monospace;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .url-bar .lock { color: var(--accent3); font-size: 10px; }
+
+  .preview-actions {
+    display: flex;
+    gap: 6px;
+  }
+
+  .preview-btn {
+    padding: 6px 12px;
+    border-radius: 6px;
+    font-size: 10px;
+    cursor: pointer;
+    border: none;
+    font-family: 'DM Mono', monospace;
+    transition: all 0.2s;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    font-weight: 500;
+  }
+
+  .preview-btn-outline {
+    background: transparent;
+    color: var(--text-muted);
+    border: 1px solid var(--border);
+  }
+
+  .preview-btn-outline:hover { border-color: var(--accent); color: var(--accent); }
+
+  .preview-btn-export {
+    background: rgba(67,233,123,0.15);
+    color: var(--accent3);
+    border: 1px solid rgba(67,233,123,0.3);
+  }
+
+  .preview-btn-export:hover { background: rgba(67,233,123,0.25); }
+
+  /* IFRAME PREVIEW */
+  .preview-frame-wrap {
+    position: relative;
+    background: #000;
+  }
+
+  #previewFrame {
+    width: 100%;
+    height: 520px;
+    border: none;
+    display: block;
+    transition: opacity 0.3s;
+  }
+
+  .preview-overlay {
+    position: absolute;
+    inset: 0;
+    background: var(--surface);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    transition: opacity 0.5s;
+  }
+
+  .preview-overlay.hidden {
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  .preview-placeholder-icon { font-size: 48px; opacity: 0.3; }
+
+  .preview-placeholder-text {
+    font-family: 'Syne', sans-serif;
+    font-size: 16px;
+    color: var(--text-muted);
+    text-align: center;
+  }
+
+  .preview-placeholder-sub {
+    font-size: 11px;
+    color: var(--text-dim);
+    text-align: center;
+    max-width: 200px;
+    line-height: 1.6;
+  }
+
+  /* LIVE INDICATOR */
+  .live-indicator {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 10px;
+    color: var(--accent3);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  .live-dot {
+    width: 6px; height: 6px;
+    background: var(--accent3);
+    border-radius: 50%;
+    animation: live-blink 1.5s ease-in-out infinite;
+  }
+
+  @keyframes live-blink {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.3; transform: scale(0.8); }
+  }
+
+  /* ═══════════ SUCCESS STATE ═══════════ */
+  #successState {
+    display: none;
+    padding: 40px 24px;
+    text-align: center;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+  }
+
+  #successState.show { display: flex; }
+
+  .success-icon {
+    width: 72px; height: 72px;
+    background: linear-gradient(135deg, var(--accent3), #00c9ff);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 32px;
+    animation: success-pop 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+  }
+
+  @keyframes success-pop {
+    from { transform: scale(0); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
+  }
+
+  .success-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 22px;
+    font-weight: 800;
+    letter-spacing: -0.5px;
+  }
+
+  .success-url {
+    padding: 12px 20px;
+    background: var(--surface2);
+    border: 1px solid rgba(67,233,123,0.3);
+    border-radius: 10px;
+    font-family: 'DM Mono', monospace;
+    font-size: 13px;
+    color: var(--accent3);
+    width: 100%;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .success-url::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(90deg, transparent, rgba(67,233,123,0.1), transparent);
+    animation: shimmer 2s infinite;
+  }
+
+  @keyframes shimmer {
+    from { transform: translateX(-100%); }
+    to { transform: translateX(100%); }
+  }
+
+  .export-btns {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    width: 100%;
+  }
+
+  .export-btn {
+    padding: 12px;
+    border-radius: 10px;
+    font-family: 'Syne', sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+    border: none;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    letter-spacing: -0.2px;
+  }
+
+  .export-btn-dl {
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    color: white;
+  }
+
+  .export-btn-dl:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(108,99,255,0.4); }
+
+  .export-btn-copy {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    color: var(--text);
+  }
+
+  .export-btn-copy:hover { border-color: var(--accent); color: var(--accent); }
+
+  .rebuild-btn {
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--text-muted);
+    padding: 10px;
+    border-radius: 8px;
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    cursor: pointer;
+    transition: all 0.2s;
+    width: 100%;
+    text-align: center;
+  }
+
+  .rebuild-btn:hover { border-color: var(--text-muted); color: var(--text); }
+
+  /* ═══════════ TOAST ═══════════ */
+  #toast {
+    position: fixed;
+    bottom: 32px;
+    right: 32px;
+    z-index: 999;
+    padding: 12px 20px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    font-size: 13px;
+    color: var(--text);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transform: translateY(80px);
+    opacity: 0;
+    transition: all 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+    box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+    backdrop-filter: blur(12px);
+  }
+
+  #toast.show { transform: translateY(0); opacity: 1; }
+
+  #toast.toast-success { border-color: rgba(67,233,123,0.4); }
+  #toast.toast-error { border-color: rgba(255,101,132,0.4); }
+
+  /* ═══════════ LOADING ANIMATION ═══════════ */
+  .generating-overlay {
+    display: none;
+    position: absolute;
+    inset: 0;
+    background: rgba(7,7,10,0.9);
+    backdrop-filter: blur(8px);
+    z-index: 10;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+    border-radius: var(--radius-lg);
+  }
+
+  .generating-overlay.show { display: flex; }
+
+  .gen-spinner {
+    width: 48px; height: 48px;
+    border-radius: 50%;
+    border: 3px solid var(--border);
+    border-top-color: var(--accent);
+    animation: spin 0.8s linear infinite;
+  }
+
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  .gen-text {
+    font-family: 'Syne', sans-serif;
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--text-muted);
+  }
+
+  .gen-steps {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    width: 220px;
+  }
+
+  .gen-step {
+    font-size: 11px;
+    color: var(--text-dim);
+    padding: 4px 0;
+    transition: color 0.3s;
+    display: flex;
+    gap: 8px;
+    align-items: center;
+  }
+
+  .gen-step.done { color: var(--accent3); }
+  .gen-step.active { color: var(--text); }
+
+  /* ═══════════ ANIMATIONS ═══════════ */
+  @keyframes fade-in {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+
+  @keyframes fade-up {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ═══════════ RESPONSIVE ═══════════ */
+  @media (max-width: 900px) {
+    .builder-grid { grid-template-columns: 1fr; }
+    .preview-panel { position: static; }
+    .hero-title { font-size: 42px; letter-spacing: -2px; }
+    .hero-stats { gap: 24px; }
+  }
+
+  @media (max-width: 600px) {
+    header { padding: 12px 16px; }
+    #landing { padding: 80px 16px 40px; }
+    #builder { padding: 40px 16px; }
+  }
+
+  /* SELECT */
+  select.field-input {
+    appearance: none;
+    cursor: pointer;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%236b6b80' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+  }
+
+  select.field-input option {
+    background: var(--surface2);
+    color: var(--text);
+  }
+
+  /* RANGE */
+  input[type="range"] {
+    -webkit-appearance: none;
+    width: 100%;
+    height: 4px;
+    background: var(--border);
+    border-radius: 2px;
+    outline: none;
+  }
+
+  input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 16px; height: 16px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    cursor: pointer;
+    box-shadow: 0 2px 8px rgba(108,99,255,0.5);
+  }
+
+  .range-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .range-val {
+    min-width: 28px;
+    text-align: center;
+    font-size: 12px;
+    color: var(--accent);
+  }
+
+  /* Social icons row */
+  .social-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .social-icon {
+    width: 32px; height: 32px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    flex-shrink: 0;
+  }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header>
+  <div class="logo">
+    <div class="logo-icon">⚡</div>
+    Nex<span>Vora</span>
+    <div class="header-badge">Beta</div>
+  </div>
+  <nav>
+    <button class="nav-btn nav-btn-ghost" onclick="scrollToBuilder()">Builder</button>
+    <button class="nav-btn nav-btn-ghost">Templates</button>
+    <button class="nav-btn nav-btn-primary" onclick="scrollToBuilder()">Get Started →</button>
+  </nav>
+</header>
+
+<!-- LANDING HERO -->
+<section id="landing">
+  <div class="hero-glow"></div>
+  <div class="hero-tag">🚀 No-Code Portfolio Generator</div>
+  <h1 class="hero-title">Build Your<br><span class="gradient-text">ProtoFolio</span><br>In 2 Minutes</h1>
+  <p class="hero-sub">No coding. No designing. Just fill in your details and get a stunning portfolio website — instantly live.</p>
+  <div class="hero-cta">
+    <button class="btn-lg btn-lg-primary" onclick="scrollToBuilder()">
+      <span style="position:relative;z-index:1">Start Building Free →</span>
+    </button>
+    <button class="btn-lg btn-lg-outline">View Examples</button>
+  </div>
+  <div class="hero-stats">
+    <div class="stat-item">
+      <div class="stat-num">4+</div>
+      <div class="stat-label">Templates</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-num">2min</div>
+      <div class="stat-label">To Live</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-num">0</div>
+      <div class="stat-label">Code Needed</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-num">∞</div>
+      <div class="stat-label">Possibilities</div>
+    </div>
+  </div>
+</section>
+
+<!-- MAIN BUILDER -->
+<section id="builder">
+  <div class="section-header">
+    <span class="section-eyebrow">⚙️ Portfolio Builder</span>
+    <h2 class="section-title">Create Your Portfolio</h2>
+  </div>
+
+  <div class="builder-grid">
+    <!-- LEFT: FORM PANEL -->
+    <div class="form-panel" id="formPanel">
+      <div class="progress-bar">
+        <div class="progress-fill" id="progressFill" style="width:25%"></div>
+      </div>
+
+      <div class="panel-header">
+        <div class="panel-title" id="panelTitleText">Step 1 of 4 — Choose Template</div>
+        <div class="panel-tag tag-blue" id="panelTagText">Template</div>
+      </div>
+
+      <div class="step-tabs">
+        <div class="step-tab active" id="tab0" onclick="goToStep(0)">01 Template</div>
+        <div class="step-tab" id="tab1" onclick="goToStep(1)">02 Profile</div>
+        <div class="step-tab" id="tab2" onclick="goToStep(2)">03 Work</div>
+        <div class="step-tab" id="tab3" onclick="goToStep(3)">04 Style</div>
+      </div>
+
+      <div class="form-body">
+
+        <!-- STEP 0: TEMPLATE -->
+        <div class="form-section active" id="step0">
+          <div class="template-grid">
+            <div class="template-card selected" onclick="selectTemplate('developer', this)">
+              <div class="template-preview tp-dark">
+                <span class="tp-icon">💻</span>
+              </div>
+              <div class="template-info">
+                <div class="template-name">Developer</div>
+                <div class="template-desc">Dark • Code-focused</div>
+              </div>
+            </div>
+            <div class="template-card" onclick="selectTemplate('student', this)">
+              <div class="template-preview tp-clean">
+                <span class="tp-icon">🎓</span>
+              </div>
+              <div class="template-info">
+                <div class="template-name">Student CV</div>
+                <div class="template-desc">Clean • Academic</div>
+              </div>
+            </div>
+            <div class="template-card" onclick="selectTemplate('freelancer', this)">
+              <div class="template-preview tp-bold">
+                <span class="tp-icon">🎨</span>
+              </div>
+              <div class="template-info">
+                <div class="template-name">Freelancer</div>
+                <div class="template-desc">Bold • Services</div>
+              </div>
+            </div>
+            <div class="template-card" onclick="selectTemplate('business', this)">
+              <div class="template-preview tp-glass">
+                <span class="tp-icon">🏢</span>
+              </div>
+              <div class="template-info">
+                <div class="template-name">Business</div>
+                <div class="template-desc">Corporate • Professional</div>
+              </div>
+            </div>
+            <div class="template-card" onclick="selectTemplate('neon', this)">
+              <div class="template-preview tp-neon">
+                <span class="tp-icon">⚡</span>
+              </div>
+              <div class="template-info">
+                <div class="template-name">Neon Cyber</div>
+                <div class="template-desc">Dark • Neon glow</div>
+              </div>
+            </div>
+            <div class="template-card" onclick="selectTemplate('minimal', this)">
+              <div class="template-preview tp-minimal">
+                <span class="tp-icon">✦</span>
+              </div>
+              <div class="template-info">
+                <div class="template-name">Minimal</div>
+                <div class="template-desc">Light • Typography</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- STEP 1: PROFILE -->
+        <div class="form-section" id="step1">
+          <div class="field-row">
+            <div class="field-group">
+              <label>Full Name *</label>
+              <input class="field-input" id="fieldName" type="text" placeholder="Alex Rahman" oninput="liveUpdate()">
+            </div>
+            <div class="field-group">
+              <label>Username *</label>
+              <input class="field-input" id="fieldUsername" type="text" placeholder="alexrahman" oninput="liveUpdate()">
+            </div>
+          </div>
+          <div class="field-group">
+            <label>Professional Title *</label>
+            <input class="field-input" id="fieldTitle" type="text" placeholder="Full-Stack Developer & UI Designer" oninput="liveUpdate()">
+          </div>
+          <div class="field-group">
+            <label>Bio / About</label>
+            <textarea class="field-input" id="fieldBio" placeholder="I'm a passionate developer who loves building things..." oninput="liveUpdate()"></textarea>
+          </div>
+          <div class="field-row">
+            <div class="field-group">
+              <label>Location</label>
+              <input class="field-input" id="fieldLocation" type="text" placeholder="Dhaka, Bangladesh" oninput="liveUpdate()">
+            </div>
+            <div class="field-group">
+              <label>Email</label>
+              <input class="field-input" id="fieldEmail" type="email" placeholder="hello@example.com" oninput="liveUpdate()">
+            </div>
+          </div>
+          <div class="field-group">
+            <label>Skills</label>
+            <div class="skills-tags" id="skillsTags" onclick="focusSkillInput()">
+              <input type="text" class="skill-input" id="skillInput" placeholder="Type & press Enter..." onkeydown="handleSkillInput(event)">
+            </div>
+            <div class="skill-hint">Press Enter or comma to add</div>
+          </div>
+        </div>
+
+        <!-- STEP 2: WORK/PROJECTS -->
+        <div class="form-section" id="step2">
+          <div class="field-group">
+            <label>GitHub / Portfolio URL</label>
+            <div class="social-row">
+              <div class="social-icon">🐙</div>
+              <input class="field-input" id="fieldGithub" type="text" placeholder="https://github.com/username" oninput="liveUpdate()">
+            </div>
+          </div>
+          <div class="field-group">
+            <label>LinkedIn</label>
+            <div class="social-row">
+              <div class="social-icon">💼</div>
+              <input class="field-input" id="fieldLinkedin" type="text" placeholder="https://linkedin.com/in/username" oninput="liveUpdate()">
+            </div>
+          </div>
+          <div class="field-group">
+            <label>Projects (Add up to 3)</label>
+            <div class="projects-list" id="projectsList"></div>
+            <button class="add-project-btn" onclick="addProject()">+ Add Project</button>
+          </div>
+          <div class="field-group">
+            <label>Services / What you offer</label>
+            <textarea class="field-input" id="fieldServices" placeholder="Web Development, UI Design, Consulting..." oninput="liveUpdate()" style="min-height:60px"></textarea>
+          </div>
+        </div>
+
+        <!-- STEP 3: STYLE -->
+        <div class="form-section" id="step3">
+          <div class="field-group">
+            <label>Accent Color</label>
+            <div class="color-row" id="colorRow">
+              <div class="color-swatch selected" style="background:#6c63ff" data-color="#6c63ff" onclick="selectColor(this)"></div>
+              <div class="color-swatch" style="background:#ff6584" data-color="#ff6584" onclick="selectColor(this)"></div>
+              <div class="color-swatch" style="background:#43e97b" data-color="#43e97b" onclick="selectColor(this)"></div>
+              <div class="color-swatch" style="background:#ffd93d" data-color="#ffd93d" onclick="selectColor(this)"></div>
+              <div class="color-swatch" style="background:#00c9ff" data-color="#00c9ff" onclick="selectColor(this)"></div>
+              <div class="color-swatch" style="background:#ff9a3c" data-color="#ff9a3c" onclick="selectColor(this)"></div>
+              <div class="color-swatch" style="background:#f72585" data-color="#f72585" onclick="selectColor(this)"></div>
+              <input type="color" class="field-input" id="customColor" style="width:32px;height:32px;padding:2px;border-radius:8px;cursor:pointer" value="#6c63ff" oninput="setCustomColor(this.value)">
+            </div>
+          </div>
+          <div class="field-group">
+            <label>Font Style</label>
+            <select class="field-input" id="fieldFont" onchange="liveUpdate()">
+              <option value="syne">Syne — Bold & Geometric</option>
+              <option value="mono">DM Mono — Technical</option>
+              <option value="cabinet">Cabinet Grotesk — Modern</option>
+              <option value="serif">Merriweather — Classic</option>
+              <option value="playfair">Playfair Display — Elegant</option>
+            </select>
+          </div>
+          <div class="field-group">
+            <label>Animation Speed</label>
+            <div class="range-row">
+              <span style="font-size:12px;color:var(--text-dim)">Slow</span>
+              <input type="range" id="animSpeed" min="1" max="5" value="3" oninput="document.getElementById('animSpeedVal').textContent=this.value;liveUpdate()">
+              <span style="font-size:12px;color:var(--text-dim)">Fast</span>
+              <span class="range-val" id="animSpeedVal">3</span>
+            </div>
+          </div>
+          <div class="field-group">
+            <label>Layout Style</label>
+            <select class="field-input" id="fieldLayout" onchange="liveUpdate()">
+              <option value="centered">Centered — Clean focus</option>
+              <option value="left">Left-aligned — Editorial</option>
+              <option value="split">Split — Two column</option>
+            </select>
+          </div>
+          <div class="field-group">
+            <label>Tagline / Quote</label>
+            <input class="field-input" id="fieldTagline" type="text" placeholder="Building the future, one line at a time." oninput="liveUpdate()">
+          </div>
+        </div>
+
+      </div>
+
+      <!-- SUCCESS STATE -->
+      <div id="successState">
+        <div class="success-icon">🚀</div>
+        <div class="success-title">Portfolio Generated!</div>
+        <div class="success-url" id="successUrl">🔗 alexrahman.nexvora.app</div>
+        <div class="export-btns">
+          <button class="export-btn export-btn-dl" onclick="downloadHTML()">⬇ Download HTML</button>
+          <button class="export-btn export-btn-copy" onclick="copyCode()">📋 Copy Code</button>
+        </div>
+        <button class="export-btn export-btn-copy" style="width:100%" onclick="shareLink()">🔗 Copy Share Link</button>
+        <button class="rebuild-btn" onclick="resetBuilder()">← Edit / Rebuild</button>
+      </div>
+
+      <div class="panel-footer" id="panelFooter">
+        <button class="btn-prev" id="btnPrev" onclick="prevStep()" disabled>← Back</button>
+        <div style="font-size:11px;color:var(--text-dim)" id="stepCounter">1 / 4</div>
+        <button class="btn-next" id="btnNext" onclick="nextStep()">Next Step →</button>
+      </div>
+    </div>
+
+    <!-- RIGHT: PREVIEW PANEL -->
+    <div class="preview-panel" id="previewPanel" style="position:relative">
+      <div class="preview-toolbar">
+        <div class="browser-dots">
+          <div class="dot dot-red"></div>
+          <div class="dot dot-yellow"></div>
+          <div class="dot dot-green"></div>
+        </div>
+        <div class="url-bar">
+          <span class="lock">🔒</span>
+          <span id="urlBarText">nexvora.app/username</span>
+        </div>
+        <div class="preview-actions">
+          <div class="live-indicator">
+            <div class="live-dot"></div>
+            Live
+          </div>
+        </div>
+      </div>
+
+      <div class="preview-frame-wrap">
+        <iframe id="previewFrame" srcdoc=""></iframe>
+        <div class="preview-overlay" id="previewOverlay">
+          <div class="preview-placeholder-icon">🖥️</div>
+          <div class="preview-placeholder-text">Live Preview</div>
+          <div class="preview-placeholder-sub">Fill in your details and your portfolio will appear here in real-time</div>
+        </div>
+      </div>
+
+      <div style="padding:12px 20px;border-top:1px solid var(--border);background:var(--surface2);display:flex;gap:8px">
+        <button class="preview-btn preview-btn-outline" style="flex:1" onclick="refreshPreview()">🔄 Refresh</button>
+        <button class="preview-btn preview-btn-outline" style="flex:1" onclick="openFullPreview()">⛶ Full View</button>
+        <button class="preview-btn preview-btn-export" style="flex:1" onclick="downloadHTML()">⬇ Export</button>
+      </div>
+
+      <!-- GENERATING OVERLAY -->
+      <div class="generating-overlay" id="generatingOverlay">
+        <div class="gen-spinner"></div>
+        <div class="gen-text">Generating Portfolio...</div>
+        <div class="gen-steps">
+          <div class="gen-step" id="gs1">○ Compiling template</div>
+          <div class="gen-step" id="gs2">○ Injecting your data</div>
+          <div class="gen-step" id="gs3">○ Applying styles</div>
+          <div class="gen-step" id="gs4">○ Building layout</div>
+          <div class="gen-step" id="gs5">○ Finalizing output</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TOAST -->
+<div id="toast"></div>
+
+<script>
+// ═══════════════════════════════════════════
+// APP STATE
+// ═══════════════════════════════════════════
+let state = {
+  currentStep: 0,
+  template: 'developer',
+  accentColor: '#6c63ff',
+  skills: [],
+  projects: [],
+  generated: false,
+  generatedHTML: ''
+};
+
+const STEP_CONFIG = [
+  { title: 'Step 1 of 4 — Choose Template', tag: 'Template', tag_class: 'tag-blue' },
+  { title: 'Step 2 of 4 — Your Profile',    tag: 'Profile',  tag_class: 'tag-green' },
+  { title: 'Step 3 of 4 — Your Work',       tag: 'Work',     tag_class: 'tag-blue' },
+  { title: 'Step 4 of 4 — Final Style',     tag: 'Style',    tag_class: 'tag-green' },
+];
+
+// ═══════════════════════════════════════════
+// NAVIGATION
+// ═══════════════════════════════════════════
+function goToStep(n) {
+  // Only allow going to completed steps
+  if (n > state.currentStep) return;
+  switchStep(n);
+}
+
+function nextStep() {
+  if (state.currentStep < 3) {
+    switchStep(state.currentStep + 1);
+  } else {
+    generatePortfolio();
+  }
+}
+
+function prevStep() {
+  if (state.currentStep > 0) switchStep(state.currentStep - 1);
+}
+
+function switchStep(n) {
+  document.getElementById('step' + state.currentStep).classList.remove('active');
+  document.getElementById('tab' + state.currentStep).classList.remove('active');
+
+  state.currentStep = n;
+
+  document.getElementById('step' + n).classList.add('active');
+
+  for (let i = 0; i <= n; i++) {
+    document.getElementById('tab' + i).classList.add(i < n ? 'done' : 'active');
+    if (i < n) document.getElementById('tab' + i).classList.remove('active');
+  }
+
+  const cfg = STEP_CONFIG[n];
+  document.getElementById('panelTitleText').textContent = cfg.title;
+  document.getElementById('panelTagText').textContent = cfg.tag;
+  document.getElementById('panelTagText').className = 'panel-tag ' + cfg.tag_class;
+  document.getElementById('progressFill').style.width = ((n + 1) / 4 * 100) + '%';
+  document.getElementById('stepCounter').textContent = (n + 1) + ' / 4';
+  document.getElementById('btnPrev').disabled = n === 0;
+  document.getElementById('btnNext').textContent = n === 3 ? '🚀 Generate!' : 'Next Step →';
+  if (n === 3) document.getElementById('btnNext').classList.add('btn-generate');
+  else document.getElementById('btnNext').classList.remove('btn-generate');
+
+  liveUpdate();
+}
+
+function scrollToBuilder() {
+  document.getElementById('builder').scrollIntoView({ behavior: 'smooth' });
+}
+
+// ═══════════════════════════════════════════
+// TEMPLATE SELECTION
+// ═══════════════════════════════════════════
+function selectTemplate(name, el) {
+  document.querySelectorAll('.template-card').forEach(c => c.classList.remove('selected'));
+  el.classList.add('selected');
+  state.template = name;
+  liveUpdate();
+}
+
+// ═══════════════════════════════════════════
+// SKILLS
+// ═══════════════════════════════════════════
+function focusSkillInput() {
+  document.getElementById('skillInput').focus();
+}
+
+function handleSkillInput(e) {
+  if (e.key === 'Enter' || e.key === ',') {
+    e.preventDefault();
+    const val = e.target.value.replace(',', '').trim();
+    if (val && !state.skills.includes(val)) {
+      state.skills.push(val);
+      renderSkills();
+      liveUpdate();
+    }
+    e.target.value = '';
+  }
+  if (e.key === 'Backspace' && e.target.value === '' && state.skills.length > 0) {
+    state.skills.pop();
+    renderSkills();
+    liveUpdate();
+  }
+}
+
+function renderSkills() {
+  const container = document.getElementById('skillsTags');
+  const input = document.getElementById('skillInput');
+  container.innerHTML = '';
+  state.skills.forEach((s, i) => {
+    const tag = document.createElement('div');
+    tag.className = 'skill-tag';
+    tag.innerHTML = `${s}<span class="skill-tag-remove" onclick="removeSkill(${i})">✕</span>`;
+    container.appendChild(tag);
+  });
+  container.appendChild(input);
+}
+
+function removeSkill(i) {
+  state.skills.splice(i, 1);
+  renderSkills();
+  liveUpdate();
+}
+
+// ═══════════════════════════════════════════
+// PROJECTS
+// ═══════════════════════════════════════════
+function addProject() {
+  if (state.projects.length >= 3) { showToast('⚠️ Max 3 projects', 'error'); return; }
+  state.projects.push({ name: '', desc: '', url: '', tech: '' });
+  renderProjects();
+}
+
+function renderProjects() {
+  const list = document.getElementById('projectsList');
+  list.innerHTML = '';
+  state.projects.forEach((p, i) => {
+    const item = document.createElement('div');
+    item.className = 'project-item';
+    item.innerHTML = `
+      <button class="project-remove" onclick="removeProject(${i})">✕</button>
+      <div class="field-row">
+        <div class="field-group">
+          <label>Project Name</label>
+          <input class="field-input" value="${p.name}" placeholder="My App" oninput="updateProject(${i},'name',this.value)">
+        </div>
+        <div class="field-group">
+          <label>Tech Stack</label>
+          <input class="field-input" value="${p.tech}" placeholder="React, Node" oninput="updateProject(${i},'tech',this.value)">
+        </div>
+      </div>
+      <div class="field-group">
+        <label>Description</label>
+        <input class="field-input" value="${p.desc}" placeholder="What does it do?" oninput="updateProject(${i},'desc',this.value)">
+      </div>
+      <div class="field-group">
+        <label>Live URL / GitHub</label>
+        <input class="field-input" value="${p.url}" placeholder="https://..." oninput="updateProject(${i},'url',this.value)">
+      </div>
+    `;
+    list.appendChild(item);
+  });
+}
+
+function updateProject(i, key, val) {
+  state.projects[i][key] = val;
+  liveUpdate();
+}
+
+function removeProject(i) {
+  state.projects.splice(i, 1);
+  renderProjects();
+  liveUpdate();
+}
+
+// ═══════════════════════════════════════════
+// COLOR
+// ═══════════════════════════════════════════
+function selectColor(el) {
+  document.querySelectorAll('.color-swatch').forEach(s => s.classList.remove('selected'));
+  el.classList.add('selected');
+  state.accentColor = el.dataset.color;
+  document.getElementById('customColor').value = state.accentColor;
+  liveUpdate();
+}
+
+function setCustomColor(val) {
+  state.accentColor = val;
+  document.querySelectorAll('.color-swatch[data-color]').forEach(s => s.classList.remove('selected'));
+  liveUpdate();
+}
+
+// ═══════════════════════════════════════════
+// DATA COLLECTION
+// ═══════════════════════════════════════════
+function getData() {
+  return {
+    name:      document.getElementById('fieldName')?.value || 'Your Name',
+    username:  document.getElementById('fieldUsername')?.value || 'username',
+    title:     document.getElementById('fieldTitle')?.value || 'Professional Title',
+    bio:       document.getElementById('fieldBio')?.value || '',
+    location:  document.getElementById('fieldLocation')?.value || '',
+    email:     document.getElementById('fieldEmail')?.value || '',
+    github:    document.getElementById('fieldGithub')?.value || '',
+    linkedin:  document.getElementById('fieldLinkedin')?.value || '',
+    services:  document.getElementById('fieldServices')?.value || '',
+    tagline:   document.getElementById('fieldTagline')?.value || '',
+    font:      document.getElementById('fieldFont')?.value || 'syne',
+    layout:    document.getElementById('fieldLayout')?.value || 'centered',
+    skills:    state.skills,
+    projects:  state.projects,
+    template:  state.template,
+    accent:    state.accentColor,
+  };
+}
+
+// ═══════════════════════════════════════════
+// LIVE UPDATE
+// ═══════════════════════════════════════════
+let liveTimer = null;
+function liveUpdate() {
+  clearTimeout(liveTimer);
+  liveTimer = setTimeout(() => {
+    const data = getData();
+    const url = data.username ? `${data.username}.nexvora.app` : 'nexvora.app/preview';
+    document.getElementById('urlBarText').textContent = url;
+    const html = buildHTML(data);
+    const frame = document.getElementById('previewFrame');
+    frame.srcdoc = html;
+    document.getElementById('previewOverlay').classList.add('hidden');
+    state.generatedHTML = html;
+  }, 120);
+}
+
+// ═══════════════════════════════════════════
+// HTML GENERATOR ENGINE
+// ═══════════════════════════════════════════
+function buildHTML(d) {
+  const fontMap = {
+    syne:    "'Syne', sans-serif",
+    mono:    "'DM Mono', monospace",
+    cabinet: "'Cabinet Grotesk', sans-serif",
+    serif:   "'Merriweather', serif",
+    playfair:"'Playfair Display', serif"
+  };
+
+  const fontImport = {
+    syne:    "https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&display=swap",
+    mono:    "https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500&display=swap",
+    cabinet: "https://fonts.googleapis.com/css2?family=Cabinet+Grotesk:wght@400;700;900&display=swap",
+    serif:   "https://fonts.googleapis.com/css2?family=Merriweather:wght@300;400;700&display=swap",
+    playfair:"https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;800&display=swap"
+  };
+
+  const font = fontMap[d.font] || fontMap.syne;
+  const fontUrl = fontImport[d.font] || fontImport.syne;
+  const acc = d.accent;
+  const skillsList = d.skills.map(s => `<span class="skill-badge">${s}</span>`).join('');
+  const projectsHTML = d.projects.length > 0
+    ? d.projects.map(p => `
+      <div class="project-card">
+        <div class="project-top">
+          <span class="project-name">${p.name || 'Project'}</span>
+          ${p.url ? `<a href="${p.url}" class="project-link" target="_blank">↗</a>` : ''}
+        </div>
+        ${p.desc ? `<p class="project-desc">${p.desc}</p>` : ''}
+        ${p.tech ? `<div class="project-tech">${p.tech}</div>` : ''}
+      </div>`).join('')
+    : '';
+
+  const socialLinks = [
+    d.github   ? `<a href="${d.github}" class="social-link" target="_blank">GitHub</a>` : '',
+    d.linkedin ? `<a href="${d.linkedin}" class="social-link" target="_blank">LinkedIn</a>` : '',
+    d.email    ? `<a href="mailto:${d.email}" class="social-link">Email</a>` : '',
+  ].filter(Boolean).join('');
+
+  const templates = {
+    developer: buildDeveloperTemplate,
+    student:   buildStudentTemplate,
+    freelancer:buildFreelancerTemplate,
+    business:  buildBusinessTemplate,
+    neon:      buildNeonTemplate,
+    minimal:   buildMinimalTemplate,
+  };
+
+  const builder = templates[d.template] || templates.developer;
+  return builder(d, font, fontUrl, acc, skillsList, projectsHTML, socialLinks);
+}
+
+function buildDeveloperTemplate(d, font, fontUrl, acc, skillsList, projectsHTML, socialLinks) {
+  return `<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>${d.name} — Portfolio</title>
+<link href="${fontUrl}" rel="stylesheet">
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  :root{--acc:${acc}}
+  body{font-family:${font};background:#080812;color:#e0e0f0;min-height:100vh;line-height:1.6}
+  body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(rgba(255,255,255,.02) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.02) 1px,transparent 1px);background-size:32px 32px;pointer-events:none}
+  .hero{min-height:100vh;display:flex;flex-direction:column;justify-content:center;padding:60px 48px;position:relative;overflow:hidden}
+  .hero::before{content:'';position:absolute;width:500px;height:500px;border-radius:50%;background:radial-gradient(circle,${acc}22 0%,transparent 70%);top:-100px;right:-100px;pointer-events:none}
+  .tag{display:inline-flex;align-items:center;gap:6px;font-size:11px;color:${acc};border:1px solid ${acc}44;padding:5px 12px;border-radius:20px;margin-bottom:24px;background:${acc}11;letter-spacing:1.5px;text-transform:uppercase;width:fit-content}
+  h1{font-size:clamp(40px,7vw,80px);font-weight:800;letter-spacing:-3px;line-height:1;margin-bottom:12px}
+  h1 span{color:${acc}}
+  .subtitle{font-size:18px;color:#888;margin-bottom:24px}
+  .bio{font-size:15px;color:#aaa;max-width:540px;margin-bottom:40px;line-height:1.8}
+  .skills-wrap{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:40px}
+  .skill-badge{padding:5px 12px;border:1px solid ${acc}44;border-radius:6px;font-size:12px;color:${acc};background:${acc}11}
+  .cta-row{display:flex;gap:12px;flex-wrap:wrap}
+  .btn{padding:12px 28px;border-radius:10px;font-family:${font};font-size:14px;font-weight:700;cursor:pointer;text-decoration:none;transition:all .2s;display:inline-block}
+  .btn-primary{background:${acc};color:#fff}
+  .btn-outline{border:1px solid #333;color:#ccc;background:transparent}
+  .btn-primary:hover{opacity:.85;transform:translateY(-1px)}
+  .btn-outline:hover{border-color:${acc};color:${acc}}
+  .section{padding:60px 48px;border-top:1px solid #111}
+  .section-title{font-size:11px;color:${acc};letter-spacing:3px;text-transform:uppercase;margin-bottom:32px}
+  .project-card{background:#0d0d18;border:1px solid #1a1a2e;border-radius:12px;padding:20px;margin-bottom:12px;transition:border-color .2s}
+  .project-card:hover{border-color:${acc}55}
+  .project-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
+  .project-name{font-size:15px;font-weight:700;color:#e0e0f0}
+  .project-link{color:${acc};text-decoration:none;font-size:18px}
+  .project-desc{color:#777;font-size:13px;margin-bottom:8px;line-height:1.6}
+  .project-tech{font-size:11px;color:${acc};letter-spacing:0.5px}
+  .social-link{color:#666;text-decoration:none;font-size:13px;margin-right:16px;transition:color .2s}
+  .social-link:hover{color:${acc}}
+  .info-row{display:flex;gap:24px;flex-wrap:wrap;margin-bottom:24px}
+  .info-item{font-size:13px;color:#666}
+  .info-item span{color:${acc}}
+  footer{padding:40px 48px;border-top:1px solid #111;color:#333;font-size:12px}
+</style>
+</head>
+<body>
+  <section class="hero">
+    <div class="tag">💻 Available for work</div>
+    <h1>${d.name.split(' ')[0]||'Alex'}<br><span>${d.name.split(' ').slice(1).join(' ')||'Rahman'}</span></h1>
+    <div class="subtitle">${d.title}</div>
+    ${d.bio ? `<p class="bio">${d.bio}</p>` : ''}
+    ${skillsList ? `<div class="skills-wrap">${skillsList}</div>` : ''}
+    <div class="cta-row">
+      ${d.github ? `<a href="${d.github}" class="btn btn-primary" target="_blank">View GitHub</a>` : ''}
+      ${d.email ? `<a href="mailto:${d.email}" class="btn btn-outline">Contact Me</a>` : ''}
+    </div>
+  </section>
+  ${projectsHTML ? `<section class="section"><div class="section-title">◈ Selected Projects</div>${projectsHTML}</section>` : ''}
+  <section class="section">
+    <div class="section-title">◈ Connect</div>
+    <div class="info-row">
+      ${d.location ? `<div class="info-item">📍 <span>${d.location}</span></div>` : ''}
+      ${d.email ? `<div class="info-item">✉ <span>${d.email}</span></div>` : ''}
+    </div>
+    <div>${socialLinks}</div>
+  </section>
+  <footer>© ${new Date().getFullYear()} ${d.name} — Built with NexVora</footer>
+</body></html>`;
+}
+
+function buildStudentTemplate(d, font, fontUrl, acc, skillsList, projectsHTML, socialLinks) {
+  return `<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>${d.name} — CV</title>
+<link href="${fontUrl}" rel="stylesheet">
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  :root{--acc:${acc}}
+  body{font-family:${font};background:#fafafa;color:#1a1a2e;min-height:100vh;line-height:1.6}
+  .header{background:#fff;border-bottom:4px solid ${acc};padding:48px;text-align:center}
+  .avatar{width:80px;height:80px;border-radius:50%;background:linear-gradient(135deg,${acc},${acc}88);display:flex;align-items:center;justify-content:center;font-size:32px;margin:0 auto 20px;color:#fff}
+  h1{font-size:36px;font-weight:800;letter-spacing:-1px;color:#1a1a2e;margin-bottom:6px}
+  .subtitle{color:${acc};font-size:16px;font-weight:600;margin-bottom:12px}
+  .bio{color:#666;font-size:14px;max-width:480px;margin:0 auto 20px}
+  .meta-row{display:flex;justify-content:center;gap:20px;font-size:12px;color:#999}
+  .section{padding:40px 48px;background:#fff;border-bottom:1px solid #eee}
+  .section:nth-child(odd){background:#f8f8fc}
+  .section-title{font-size:13px;font-weight:700;color:${acc};text-transform:uppercase;letter-spacing:2px;margin-bottom:20px;display:flex;align-items:center;gap:8px}
+  .section-title::before{content:'';width:4px;height:16px;background:${acc};border-radius:2px;display:inline-block}
+  .skills-wrap{display:flex;flex-wrap:wrap;gap:8px}
+  .skill-badge{padding:6px 14px;background:${acc}15;border-radius:20px;font-size:12px;color:${acc};font-weight:600}
+  .project-card{border-left:3px solid ${acc};padding:12px 16px;margin-bottom:12px;background:#fff;border-radius:0 8px 8px 0}
+  .project-name{font-weight:700;font-size:14px;margin-bottom:4px}
+  .project-desc{color:#777;font-size:13px}
+  .project-tech{font-size:11px;color:${acc};margin-top:6px}
+  .project-link{color:${acc};text-decoration:none;font-size:12px}
+  .social-link{color:${acc};text-decoration:none;font-size:13px;margin-right:16px;font-weight:600}
+  .contact-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  .contact-item{font-size:13px;color:#666;display:flex;gap:6px}
+</style>
+</head>
+<body>
+  <div class="header">
+    <div class="avatar">👤</div>
+    <h1>${d.name}</h1>
+    <div class="subtitle">${d.title}</div>
+    ${d.bio ? `<p class="bio">${d.bio}</p>` : ''}
+    <div class="meta-row">
+      ${d.location ? `<span>📍 ${d.location}</span>` : ''}
+      ${d.email ? `<span>✉ ${d.email}</span>` : ''}
+    </div>
+  </div>
+  ${skillsList ? `<div class="section"><div class="section-title">Skills</div><div class="skills-wrap">${skillsList}</div></div>` : ''}
+  ${projectsHTML ? `<div class="section"><div class="section-title">Projects</div>${projectsHTML}</div>` : ''}
+  <div class="section">
+    <div class="section-title">Contact</div>
+    <div>${socialLinks}</div>
+  </div>
+  <div style="text-align:center;padding:20px;font-size:11px;color:#ccc">Built with NexVora</div>
+</body></html>`;
+}
+
+function buildFreelancerTemplate(d, font, fontUrl, acc, skillsList, projectsHTML, socialLinks) {
+  return `<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>${d.name} — Freelancer</title>
+<link href="${fontUrl}" rel="stylesheet">
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:${font};background:#0a0a0a;color:#f0f0f0;min-height:100vh}
+  .hero{padding:80px 48px;border-bottom:1px solid #1a1a1a;position:relative;overflow:hidden}
+  .hero::after{content:'';position:absolute;bottom:0;left:48px;width:60px;height:3px;background:${acc}}
+  .available{font-size:11px;color:${acc};letter-spacing:2px;text-transform:uppercase;margin-bottom:16px;display:flex;align-items:center;gap:8px}
+  .available::before{content:'';width:6px;height:6px;background:${acc};border-radius:50%;animation:blink 1.5s infinite}
+  @keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+  h1{font-size:clamp(48px,7vw,80px);font-weight:900;letter-spacing:-3px;line-height:.95;margin-bottom:20px}
+  h1 em{color:${acc};font-style:normal}
+  .bio{color:#888;font-size:16px;max-width:500px;line-height:1.7;margin-bottom:36px}
+  .cta-row{display:flex;gap:12px}
+  .btn{padding:14px 28px;border-radius:8px;font-family:${font};font-size:14px;font-weight:700;cursor:pointer;text-decoration:none;transition:all .2s;display:inline-block}
+  .btn-primary{background:${acc};color:#000}
+  .btn-outline{border:1px solid #2a2a2a;color:#888;background:transparent}
+  .btn-primary:hover{opacity:.85}
+  .btn-outline:hover{border-color:${acc};color:${acc}}
+  .services{padding:60px 48px;background:#0d0d0d}
+  .section-title{font-size:11px;color:${acc};letter-spacing:3px;text-transform:uppercase;margin-bottom:32px}
+  .services-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+  .service-item{padding:20px;background:#111;border:1px solid #1a1a1a;border-radius:10px;transition:border-color .2s}
+  .service-item:hover{border-color:${acc}55}
+  .service-name{font-weight:700;font-size:14px;margin-bottom:6px}
+  .service-desc{color:#666;font-size:12px;line-height:1.6}
+  .skills-wrap{display:flex;flex-wrap:wrap;gap:8px;margin-top:20px}
+  .skill-badge{padding:5px 12px;border:1px solid #2a2a2a;border-radius:6px;font-size:12px;color:#aaa}
+  .project-card{background:#111;border:1px solid #1a1a1a;border-radius:10px;padding:20px;margin-bottom:12px}
+  .project-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
+  .project-name{font-weight:700}
+  .project-link{color:${acc};text-decoration:none}
+  .project-desc{color:#666;font-size:13px;margin-bottom:8px}
+  .project-tech{font-size:11px;color:${acc}}
+  .social-link{color:#666;text-decoration:none;font-size:13px;margin-right:16px;transition:color .2s}
+  .social-link:hover{color:${acc}}
+  footer{padding:40px 48px;color:#333;font-size:12px;border-top:1px solid #111}
+</style>
+</head>
+<body>
+  <section class="hero">
+    <div class="available">● Available for projects</div>
+    <h1>${d.name.split(' ')[0]||'Alex'}<br><em>${d.title||'Freelancer'}</em></h1>
+    ${d.bio ? `<p class="bio">${d.bio}</p>` : ''}
+    <div class="cta-row">
+      ${d.email ? `<a href="mailto:${d.email}" class="btn btn-primary">Hire Me →</a>` : ''}
+      ${d.github ? `<a href="${d.github}" class="btn btn-outline" target="_blank">Portfolio</a>` : ''}
+    </div>
+  </section>
+  ${d.services ? `<section class="services"><div class="section-title">◈ Services</div><div style="color:#999;font-size:14px;line-height:1.8">${d.services}</div>${skillsList ? `<div class="skills-wrap">${skillsList}</div>` : ''}</section>` : (skillsList ? `<section class="services"><div class="section-title">◈ Skills</div><div class="skills-wrap">${skillsList}</div></section>` : '')}
+  ${projectsHTML ? `<section style="padding:60px 48px"><div class="section-title">◈ Work</div>${projectsHTML}</section>` : ''}
+  <section style="padding:60px 48px;border-top:1px solid #111">
+    <div class="section-title">◈ Contact</div>
+    ${d.location ? `<p style="color:#666;font-size:13px;margin-bottom:16px">📍 ${d.location}</p>` : ''}
+    <div>${socialLinks}</div>
+  </section>
+  <footer>© ${new Date().getFullYear()} ${d.name} — Built with NexVora</footer>
+</body></html>`;
+}
+
+function buildBusinessTemplate(d, font, fontUrl, acc, skillsList, projectsHTML, socialLinks) {
+  return `<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>${d.name}</title>
+<link href="${fontUrl}" rel="stylesheet">
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:${font};background:#fff;color:#1a1a2e;min-height:100vh}
+  nav{display:flex;align-items:center;justify-content:space-between;padding:20px 48px;border-bottom:1px solid #eee}
+  .nav-brand{font-size:18px;font-weight:800;letter-spacing:-0.5px;color:${acc}}
+  .nav-link{font-size:13px;color:#666;text-decoration:none;margin-left:24px;transition:color .2s}
+  .nav-link:hover{color:${acc}}
+  .hero{padding:100px 48px;background:linear-gradient(135deg,#f8f9ff 0%,#fff 100%);position:relative;overflow:hidden}
+  .hero::before{content:'';position:absolute;right:-100px;top:-100px;width:400px;height:400px;border-radius:50%;background:${acc}11;pointer-events:none}
+  .hero-tag{display:inline-block;font-size:11px;background:${acc}15;color:${acc};padding:5px 12px;border-radius:20px;margin-bottom:20px;font-weight:600;letter-spacing:1px;text-transform:uppercase}
+  h1{font-size:clamp(36px,5vw,64px);font-weight:800;letter-spacing:-2px;line-height:1.1;margin-bottom:16px;max-width:600px}
+  h1 span{color:${acc}}
+  .bio{color:#777;font-size:16px;max-width:500px;line-height:1.7;margin-bottom:36px}
+  .cta-row{display:flex;gap:12px}
+  .btn{padding:12px 28px;border-radius:8px;font-family:${font};font-size:14px;font-weight:700;cursor:pointer;text-decoration:none;transition:all .2s;display:inline-block}
+  .btn-primary{background:${acc};color:#fff}
+  .btn-outline{border:2px solid ${acc};color:${acc};background:transparent}
+  .btn-primary:hover{opacity:.85;transform:translateY(-1px)}
+  .section{padding:60px 48px}
+  .section-alt{background:#f8f9ff}
+  .section-title-lg{font-size:32px;font-weight:800;letter-spacing:-1px;margin-bottom:8px}
+  .section-sub{color:#777;font-size:14px;margin-bottom:32px}
+  .features-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+  .feature-card{padding:24px;border:1px solid #eee;border-radius:12px;transition:all .2s}
+  .feature-card:hover{border-color:${acc}55;box-shadow:0 8px 30px ${acc}15}
+  .feature-icon{font-size:28px;margin-bottom:12px}
+  .feature-name{font-weight:700;font-size:14px;margin-bottom:6px}
+  .feature-desc{color:#888;font-size:12px;line-height:1.6}
+  .skill-badge{padding:6px 14px;background:${acc}12;border-radius:6px;font-size:12px;color:${acc};font-weight:600;display:inline-block;margin:4px}
+  .project-card{background:#fff;border:1px solid #eee;border-radius:12px;padding:20px;margin-bottom:12px}
+  .project-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
+  .project-name{font-weight:700}
+  .project-link{color:${acc};text-decoration:none;font-size:18px}
+  .project-desc{color:#777;font-size:13px;margin-bottom:8px}
+  .project-tech{font-size:11px;color:${acc}}
+  .social-link{color:${acc};text-decoration:none;font-size:13px;font-weight:600;margin-right:16px}
+  footer{background:#1a1a2e;color:#888;padding:40px 48px;font-size:13px;display:flex;align-items:center;justify-content:space-between}
+  footer strong{color:#fff}
+</style>
+</head>
+<body>
+  <nav>
+    <div class="nav-brand">${d.name}</div>
+    <div>
+      ${d.email ? `<a href="mailto:${d.email}" class="nav-link">Contact</a>` : ''}
+      ${d.github ? `<a href="${d.github}" class="nav-link" target="_blank">Portfolio</a>` : ''}
+    </div>
+  </nav>
+  <section class="hero">
+    <div class="hero-tag">✦ Professional Services</div>
+    <h1>${d.title || `Welcome to <span>${d.name}</span>`}</h1>
+    ${d.bio ? `<p class="bio">${d.bio}</p>` : ''}
+    <div class="cta-row">
+      ${d.email ? `<a href="mailto:${d.email}" class="btn btn-primary">Get in Touch</a>` : ''}
+      ${d.github ? `<a href="${d.github}" class="btn btn-outline" target="_blank">View Work</a>` : ''}
+    </div>
+  </section>
+  ${skillsList ? `<section class="section section-alt"><div class="section-title-lg">Expertise</div><div class="section-sub">What I bring to the table</div><div>${skillsList}</div></section>` : ''}
+  ${projectsHTML ? `<section class="section"><div class="section-title-lg">Projects</div><div class="section-sub">Selected work</div>${projectsHTML}</section>` : ''}
+  <section class="section section-alt">
+    <div class="section-title-lg">Contact</div>
+    <div class="section-sub">${d.location || 'Available worldwide'}</div>
+    <div>${socialLinks}</div>
+  </section>
+  <footer><strong>© ${new Date().getFullYear()} ${d.name}</strong><span>Built with NexVora</span></footer>
+</body></html>`;
+}
+
+function buildNeonTemplate(d, font, fontUrl, acc, skillsList, projectsHTML, socialLinks) {
+  return `<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>${d.name}</title>
+<link href="${fontUrl}" rel="stylesheet">
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:${font};background:#000;color:#e0ffe0;min-height:100vh}
+  body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(${acc}08 1px,transparent 1px),linear-gradient(90deg,${acc}08 1px,transparent 1px);background-size:30px 30px;pointer-events:none}
+  .hero{padding:100px 48px;position:relative;min-height:100vh;display:flex;flex-direction:column;justify-content:center}
+  .glitch{font-size:clamp(48px,8vw,100px);font-weight:900;letter-spacing:-3px;line-height:1;color:#fff;text-shadow:2px 2px ${acc},−2px −2px ${acc}88;margin-bottom:12px}
+  .glitch span{color:${acc};text-shadow:0 0 20px ${acc},0 0 40px ${acc}88}
+  .subtitle{font-size:16px;color:${acc};letter-spacing:3px;text-transform:uppercase;margin-bottom:20px}
+  .bio{color:#668866;font-size:15px;max-width:480px;line-height:1.8;margin-bottom:40px}
+  .skills-wrap{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:40px}
+  .skill-badge{padding:4px 12px;border:1px solid ${acc}55;border-radius:4px;font-size:12px;color:${acc};background:${acc}0a;text-shadow:0 0 8px ${acc}88}
+  .cta-row{display:flex;gap:12px}
+  .btn{padding:12px 28px;border-radius:6px;font-family:${font};font-size:14px;font-weight:700;cursor:pointer;text-decoration:none;transition:all .3s;display:inline-block;text-transform:uppercase;letter-spacing:1px}
+  .btn-primary{background:transparent;color:${acc};border:2px solid ${acc};box-shadow:0 0 20px ${acc}44,inset 0 0 20px ${acc}11}
+  .btn-primary:hover{background:${acc}22;box-shadow:0 0 40px ${acc}88}
+  .btn-outline{border:1px solid #1a1a1a;color:#446644;background:transparent}
+  .btn-outline:hover{border-color:${acc}44;color:${acc}88}
+  .section{padding:60px 48px;border-top:1px solid #0a1a0a}
+  .section-title{font-size:11px;color:${acc};letter-spacing:4px;text-transform:uppercase;margin-bottom:32px}
+  .project-card{border:1px solid ${acc}22;border-radius:8px;padding:20px;margin-bottom:12px;background:${acc}04;transition:all .3s}
+  .project-card:hover{border-color:${acc}55;box-shadow:0 0 20px ${acc}22}
+  .project-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
+  .project-name{font-weight:700;color:${acc};text-shadow:0 0 10px ${acc}88}
+  .project-link{color:${acc};text-decoration:none}
+  .project-desc{color:#446644;font-size:13px;margin-bottom:8px}
+  .project-tech{font-size:11px;color:${acc}88}
+  .social-link{color:${acc}88;text-decoration:none;font-size:13px;margin-right:16px;transition:all .2s}
+  .social-link:hover{color:${acc};text-shadow:0 0 10px ${acc}}
+  footer{padding:40px 48px;color:#1a2a1a;font-size:12px;border-top:1px solid #0a1a0a}
+</style>
+</head>
+<body>
+  <section class="hero">
+    <div class="glitch">${d.name.split(' ')[0]||'Alex'}<br><span>${d.name.split(' ').slice(1).join(' ')||''}</span></div>
+    <div class="subtitle">${d.title}</div>
+    ${d.bio ? `<p class="bio">${d.bio}</p>` : ''}
+    ${skillsList ? `<div class="skills-wrap">${skillsList}</div>` : ''}
+    <div class="cta-row">
+      ${d.github ? `<a href="${d.github}" class="btn btn-primary" target="_blank">[ View Work ]</a>` : ''}
+      ${d.email ? `<a href="mailto:${d.email}" class="btn btn-outline">[ Contact ]</a>` : ''}
+    </div>
+  </section>
+  ${projectsHTML ? `<section class="section"><div class="section-title">// Projects</div>${projectsHTML}</section>` : ''}
+  <section class="section">
+    <div class="section-title">// Connect</div>
+    ${d.location ? `<p style="color:#336633;font-size:13px;margin-bottom:16px">// ${d.location}</p>` : ''}
+    <div>${socialLinks}</div>
+  </section>
+  <footer>// Built with NexVora | ${d.name} © ${new Date().getFullYear()}</footer>
+</body></html>`;
+}
+
+function buildMinimalTemplate(d, font, fontUrl, acc, skillsList, projectsHTML, socialLinks) {
+  return `<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>${d.name}</title>
+<link href="${fontUrl}" rel="stylesheet">
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:${font};background:#fafafa;color:#111;min-height:100vh;line-height:1.6}
+  .container{max-width:680px;margin:0 auto;padding:80px 32px}
+  h1{font-size:clamp(36px,6vw,60px);font-weight:800;letter-spacing:-2px;line-height:1;margin-bottom:8px}
+  .dot{color:${acc}}
+  .title{font-size:16px;color:#666;margin-bottom:24px;font-weight:400}
+  .bio{font-size:15px;color:#444;max-width:480px;line-height:1.8;margin-bottom:40px}
+  .divider{width:40px;height:3px;background:${acc};margin:40px 0}
+  .section-label{font-size:11px;letter-spacing:3px;text-transform:uppercase;color:#999;margin-bottom:16px}
+  .skills-wrap{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:40px}
+  .skill-badge{padding:5px 12px;background:#f0f0f0;border-radius:4px;font-size:12px;color:#333}
+  .project-item{padding:16px 0;border-bottom:1px solid #eee}
+  .project-item:last-child{border-bottom:none}
+  .project-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:4px}
+  .project-name{font-weight:700;font-size:14px}
+  .project-link{color:${acc};text-decoration:none;font-size:14px}
+  .project-desc{color:#777;font-size:13px;margin-bottom:4px}
+  .project-tech{font-size:11px;color:#999}
+  .social-link{color:#444;text-decoration:none;font-size:13px;margin-right:20px;border-bottom:1px solid transparent;transition:all .2s}
+  .social-link:hover{color:${acc};border-bottom-color:${acc}}
+  .meta{display:flex;gap:24px;margin-bottom:8px;flex-wrap:wrap}
+  .meta-item{font-size:13px;color:#999}
+  .meta-item span{color:${acc}}
+  footer{margin-top:80px;padding-top:20px;border-top:1px solid #eee;font-size:12px;color:#ccc}
+</style>
+</head>
+<body>
+  <div class="container">
+    <h1>${d.name}<span class="dot">.</span></h1>
+    <div class="title">${d.title}</div>
+    <div class="meta">
+      ${d.location ? `<span class="meta-item">📍 <span>${d.location}</span></span>` : ''}
+      ${d.email ? `<span class="meta-item">✉ <span>${d.email}</span></span>` : ''}
+    </div>
+    ${d.bio ? `<p class="bio">${d.bio}</p>` : ''}
+    ${d.tagline ? `<p style="font-size:14px;color:#999;font-style:italic;margin-bottom:20px">"${d.tagline}"</p>` : ''}
+    ${skillsList ? `<div class="divider"></div><div class="section-label">Skills</div><div class="skills-wrap">${skillsList}</div>` : ''}
+    ${projectsHTML ? `<div class="divider"></div><div class="section-label">Projects</div>${projectsHTML.replace(/project-card/g,'project-item')}` : ''}
+    <div class="divider"></div>
+    <div class="section-label">Links</div>
+    <div>${socialLinks}</div>
+    <footer>© ${new Date().getFullYear()} ${d.name} · Built with NexVora</footer>
+  </div>
+</body></html>`;
+}
+
+// ═══════════════════════════════════════════
+// GENERATE
+// ═══════════════════════════════════════════
+async function generatePortfolio() {
+  const data = getData();
+  if (!data.name || data.name === 'Your Name') {
+    showToast('⚠️ Please fill in your name first!', 'error');
+    goToStep(1);
+    return;
+  }
+
+  const overlay = document.getElementById('generatingOverlay');
+  overlay.classList.add('show');
+
+  const steps = ['gs1','gs2','gs3','gs4','gs5'];
+  for (let i = 0; i < steps.length; i++) {
+    await delay(350);
+    if (i > 0) document.getElementById(steps[i-1]).classList.remove('active');
+    document.getElementById(steps[i]).classList.add('active');
+  }
+
+  await delay(400);
+  for (let s of steps) {
+    document.getElementById(s).classList.add('done');
+    document.getElementById(s).classList.remove('active');
+    document.getElementById(s).textContent = '✓ ' + document.getElementById(s).textContent.replace('○ ','');
+  }
+
+  await delay(400);
+  overlay.classList.remove('show');
+
+  const html = buildHTML(data);
+  state.generatedHTML = html;
+
+  document.getElementById('previewFrame').srcdoc = html;
+  document.getElementById('previewOverlay').classList.add('hidden');
+  document.getElementById('successUrl').textContent = `🔗 ${data.username || 'you'}.nexvora.app`;
+
+  // Switch to success state
+  document.querySelector('.form-body').style.display = 'none';
+  document.getElementById('panelFooter').style.display = 'none';
+  document.querySelector('.step-tabs').style.display = 'none';
+  document.getElementById('successState').classList.add('show');
+  document.getElementById('panelTitleText').textContent = '🚀 Portfolio Ready!';
+  document.getElementById('panelTagText').textContent = 'Live';
+  document.getElementById('panelTagText').className = 'panel-tag tag-green';
+  document.getElementById('progressFill').style.width = '100%';
+
+  state.generated = true;
+  showToast('🚀 Portfolio generated successfully!', 'success');
+  storePortfolio(data);
+}
+
+function delay(ms) { return new Promise(r => setTimeout(r, ms)); }
+
+// ═══════════════════════════════════════════
+// STORAGE (localStorage simulation as in-memory)
+// ═══════════════════════════════════════════
+const portfolioStore = {};
+
+function storePortfolio(data) {
+  portfolioStore[data.username || 'user'] = {
+    data,
+    html: state.generatedHTML,
+    createdAt: new Date().toISOString()
+  };
+}
+
+// ═══════════════════════════════════════════
+// EXPORT / SHARE
+// ═══════════════════════════════════════════
+function downloadHTML() {
+  if (!state.generatedHTML) {
+    showToast('⚠️ Generate first!', 'error');
+    return;
+  }
+  const blob = new Blob([state.generatedHTML], { type: 'text/html' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `${document.getElementById('fieldUsername')?.value || 'portfolio'}-portfolio.html`;
+  a.click();
+  URL.revokeObjectURL(url);
+  showToast('✅ HTML downloaded!', 'success');
+}
+
+function copyCode() {
+  if (!state.generatedHTML) return;
+  navigator.clipboard.writeText(state.generatedHTML).then(() => {
+    showToast('📋 Code copied!', 'success');
+  });
+}
+
+function shareLink() {
+  const username = document.getElementById('fieldUsername')?.value || 'user';
+  const link = `https://${username}.nexvora.app`;
+  navigator.clipboard.writeText(link).then(() => {
+    showToast('🔗 Link copied!', 'success');
+  });
+}
+
+function refreshPreview() {
+  liveUpdate();
+  showToast('🔄 Preview refreshed', 'success');
+}
+
+function openFullPreview() {
+  if (!state.generatedHTML) return;
+  const w = window.open();
+  w.document.write(state.generatedHTML);
+  w.document.close();
+}
+
+function resetBuilder() {
+  document.querySelector('.form-body').style.display = '';
+  document.getElementById('panelFooter').style.display = '';
+  document.querySelector('.step-tabs').style.display = '';
+  document.getElementById('successState').classList.remove('show');
+  state.generated = false;
+  switchStep(0);
+}
+
+// ═══════════════════════════════════════════
+// TOAST
+// ═══════════════════════════════════════════
+let toastTimer = null;
+function showToast(msg, type = 'success') {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = 'show toast-' + type;
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => { t.classList.remove('show'); }, 3000);
+}
+
+// ═══════════════════════════════════════════
+// INIT
+// ═══════════════════════════════════════════
+document.addEventListener('DOMContentLoaded', () => {
+  // Add initial project on start
+  // Show preview hint
+  setTimeout(() => {
+    const frame = document.getElementById('previewFrame');
+    const sampleData = {
+      name: 'Your Name', username: 'username', title: 'Your Professional Title',
+      bio: 'Fill in your details on the left to see your portfolio come alive here...',
+      location: '', email: '', github: '', linkedin: '', services: '',
+      tagline: '', font: 'syne', layout: 'centered',
+      skills: ['JavaScript', 'React', 'Design'],
+      projects: [], template: 'developer', accent: '#6c63ff'
+    };
+    const html = buildHTML(sampleData);
+    frame.srcdoc = html;
+    document.getElementById('previewOverlay').classList.add('hidden');
+    state.generatedHTML = html;
+  }, 500);
+});
+</script>
+</body>
+</html>
